@@ -41,7 +41,7 @@ jobs:
     - store_artifacts:
         path: app/build/reports
         destination: reports
-  "Unit Tests":
+  "Unit_tests":
     <<: *defaults
     steps:
     - attach_workspace:
@@ -75,6 +75,6 @@ workflows:
   build:
     jobs:
       - "Dependencies"
-      - "Unit tests":
+      - "Unit_tests":
           requires:
             - "Dependencies"
