@@ -74,10 +74,10 @@ jobs:
     <<: *defaults
     steps:
     - attach_workspace:
-        at: ~/code
+        at: ~/code/app
     - run:
         name: Generate fabric.properties
-        command: echo "apiSecret=${FABRIC_SECRET}\napiKey=${FABRIC_KEY}" > app/fabric.properties
+        command: echo "apiSecret=${FABRIC_SECRET}\napiKey=${FABRIC_KEY}" > fabric.properties
     - persist_to_workspace:
         root: ~/code
         paths:
