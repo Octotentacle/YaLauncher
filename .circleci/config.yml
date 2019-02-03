@@ -28,6 +28,19 @@ jobs:
         root: ~/code
         paths:
         - ./*
+  "Lint":
+    <<: *defaults
+    steps:
+    - attach_workspace:
+        at: ~/code
+    - restore_cache:
+        key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+    - run:
+        name: Run Lint
+        command: ./gradlew lint
+    - store_artifacts:
+        path: app/build/reports
+        destination: reports
   "Unit Tests":
     <<: *defaults
     steps:
@@ -40,19 +53,6 @@ jobs:
         command: ./gradlew test
     - store_test_results:
         path: app/build/test-results
-  "Lint":
-    <<: *defaults
-    steps:
-    - attach_workspace:
-       at: ~/code
-    - restore_cache:
-       key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
-    - run:
-       name: Run Lint
-       command: ./gradlew lint
-    - store_artifacts:
-       path: app/build/reports
-       destination: reports
   "Build":
     <<: *defaults
     steps:
