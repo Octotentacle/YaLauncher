@@ -78,9 +78,6 @@ workflows:
       - "Lint":
           requires:
             - "Dependencies"
-      - "Unit tests":
-          requires:
-            - "Dependencies"
       - "Build":
           requires:
             - "Lint"
