@@ -10,11 +10,11 @@ import android.graphics.PorterDuff.Mode
 import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
+import android.support.v7.widget.AppCompatImageView
 import android.util.AttributeSet
-import android.widget.ImageView
 
-class RoundedImageView(ctx: Context, attrs: AttributeSet) : ImageView(ctx, attrs) {
+
+class RoundedImageView(ctx: Context, attrs: AttributeSet) : AppCompatImageView(ctx, attrs) {
 
     override fun onDraw(canvas: Canvas) {
 
