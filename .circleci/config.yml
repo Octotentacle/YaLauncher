@@ -112,11 +112,11 @@ workflows:
       - "Fabric_prop":
           filters:
             branches:
-            - only: master
+              only: master
       - "Fabric_deploy":
           requires:
             - "Build"
             - "Fabric_prop"
           filters:
             branches:
-              - only: master
+              only: master
