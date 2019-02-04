@@ -9,7 +9,7 @@ apply plugin: 'io.fabric'
 android {
     signingConfigs {
         release {
-            storeFile file('D:/andr_proj/yalauncher/keystores/key.jks')
+            storeFile rootProject.file('keystores/key.jks')
             if (System.getenv("CI") != null) {
                 storePassword System.getenv("STORE_PASSWORD")
                 keyPassword System.getenv("KEY_PASSWORD")
