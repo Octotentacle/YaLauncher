@@ -77,7 +77,7 @@ jobs:
         at: ~/code/app
     - run:
         name: Generate fabric.properties
-        command: echo "apiSecret=${FABRIC_SECRET}\napiKey=${FABRIC_KEY}" > ~/code/app/fabric.properties
+        command: echo -n "apiSecret=${FABRIC_SECRET}\napiKey=${FABRIC_KEY}" >> ~/code/app/fabric.properties
     - persist_to_workspace:
         root: ~/code
         paths:
