@@ -107,8 +107,8 @@ jobs:
         command: ./gradlew -Pdeploy=true deployAppCenter
   "ktlint_download":
     docker:
-    - image: circleci/buildpack-deps:jessie-curl
-    working_directory: ~/
+      - image: circleci/buildpack-deps:jessie-curl
+    steps:
     - attach_workspace:
         at: ~/code
     - restore_cache:
