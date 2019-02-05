@@ -94,7 +94,7 @@ jobs:
     - deploy:
         name: Deploy Fabric
         command: ./gradlew crashlyticsUploadDistributionRelease
-  "Deploy AppCenter":
+  "Deploy_appc":
     <<: *defaults
     working_directory: ~/code
     steps:
@@ -131,3 +131,6 @@ workflows:
           filters:
             branches:
               only: master
+      - "Deploy_appc":
+          requires:
+            - "Build"
