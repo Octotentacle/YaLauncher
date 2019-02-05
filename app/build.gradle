@@ -10,7 +10,7 @@ apply plugin: 'io.fabric'
 
 def keystoreProperties
 if (System.getenv("CI") == null) {
-    println System.getenv()
+    System.getenv().each{ k, v -> println "${k}:${v}" }
     def keystorePropertiesFile = rootProject.file("keystores/keystore.properties")
     keystoreProperties = new Properties()
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
