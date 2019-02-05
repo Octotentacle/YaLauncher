@@ -105,10 +105,54 @@ jobs:
     - deploy:
         name: Deploy AppCenter
         command: ./gradlew -Pdeploy=true deployAppCenter
+  "ktlint_download":
+    docker:
+    - image: circleci/buildpack-deps:jessie-curl
+    working_directory: ~/
+    - attach_workspace:
+        at: ~/code
+    - restore_cache:
+        keys:
+        - ktlint-0.30
+    - run:
+        name: Download ktlint
+        command: |
+          if ! [ -f ~/ktlint ]; then
+            curl -sSLO https://github.com/shyiko/ktlint/releases/download/0.30.0/ktlint
+            chmod a+x ktlint
+          fi
+    - save_cache:
+        key: ktlint-0.30
+        paths:
+        - ~/ktlint
+    - persist_to_workspace:
+        root: ~/
+        paths:
+        - ./ktlint
+    "ktlint":
+      <<: *defaults
+      steps:
+      - attach_workspace:
+          at: ~/code
+      - run:
+          name: Create report dirs
+          command: mkdir -p app/build/reports
+      - run:
+          name: Run Kotlin Linter
+          command: |
+            ./ktlint --relative --android --reporter=plain "app/**/*.kt" 2>&1 | tee app/build/reports/ktlint-results.txt || echo Finished
+      - store_artifacts:
+          path: app/build/reports
+          destination: reports
 workflows:
   version: 2
   build:
     jobs:
+      - "ktlint_download"
+      - "ktlint":
+          requires:
+            - "Dependencies"
+            - "ktlint_download"
       - "Dependencies"
       - "Unit_tests":
           requires:

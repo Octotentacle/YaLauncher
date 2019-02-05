@@ -2,12 +2,15 @@ package octotentacle.yalauncher
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.TextView
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
 import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.analytics.Analytics
 import com.microsoft.appcenter.crashes.Crashes
 import com.microsoft.appcenter.distribute.Distribute
+import android.content.Intent
+import android.net.Uri
 
 
 class MainActivity : AppCompatActivity() {
@@ -19,5 +22,9 @@ class MainActivity : AppCompatActivity() {
             Analytics::class.java, Crashes::class.java, Distribute::class.java)
         Fabric.with(this, Crashlytics())
         setContentView(R.layout.activity_main)
+        findViewById<TextView>(R.id.r_github).setOnClickListener {
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Octotentacle"))
+            startActivity(browserIntent)
+        }
     }
 }
