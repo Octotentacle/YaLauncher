@@ -9,7 +9,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'io.fabric'
 
 def keystoreProperties
-if (System.getenv("CI") == null) {
+if (System.getenv("CI") == null && System.getenv("APPCENTER_BRANCH") == null) {
     System.getenv().each{ k, v -> println "${k}:${v}" }
     def keystorePropertiesFile = rootProject.file("keystores/keystore.properties")
     keystoreProperties = new Properties()
@@ -23,7 +23,7 @@ android {
     signingConfigs {
         release {
             storeFile rootProject.file('keystores/key.jks')
-            if (System.getenv("CI") != null) {
+            if (System.getenv("CI") != null || System.getenv("APPCENTER_BRANCH") != null) {
                 storePassword System.getenv("STORE_PASSWORD")
                 keyPassword System.getenv("KEY_PASSWORD")
                 keyAlias System.getenv("KEY_ALIAS")

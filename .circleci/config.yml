@@ -134,3 +134,6 @@ workflows:
       - "Deploy_appc":
           requires:
             - "Build"
+          filters:
+            branches:
+              only: master
