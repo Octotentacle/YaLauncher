@@ -45,7 +45,7 @@ android {
 
         def fabricKey
         def appCenterKey
-        if (System.getenv("CI") != null) {
+        if (System.getenv("CI") != null || System.getenv("APPCENTER_BRANCH") != null) {
             appCenterKey = System.getenv("APPCENTER_KEY")
             fabricKey = System.getenv("FABRIC_API_KEY")
         } else {
