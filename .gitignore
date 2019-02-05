@@ -18,7 +18,8 @@
 *.ap_
 
 # keystores
-keystores/**
+keystores/keystore.properties
+app/fabric.properties
 
 # files for the dex VM
 *.dex

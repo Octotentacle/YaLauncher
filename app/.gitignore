@@ -5,6 +5,7 @@
 
 # keystore
 keystore.properties
+fabric.properties
 
 # files for the dex VM
 *.dex
