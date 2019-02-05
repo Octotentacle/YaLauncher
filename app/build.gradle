@@ -8,8 +8,6 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'io.fabric'
 
-apply plugin: 'com.google.gms.google-services'
-
 def keystoreProperties
 if (System.getenv("CI") == null) {
     def keystorePropertiesFile = rootProject.file("keystores/keystore.properties")
