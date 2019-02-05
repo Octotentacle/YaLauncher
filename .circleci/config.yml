@@ -163,6 +163,7 @@ workflows:
           requires:
             - "Lint"
             - "Unit_tests"
+            - "ktlint"
       - "Fabric_prop":
           filters:
             branches:
