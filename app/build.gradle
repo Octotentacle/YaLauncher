@@ -93,6 +93,7 @@ task deployAppCenter() {
     def appCenterAppName = System.getenv("APP_CENTER_APP_NAME")
     def appCenterUrl = "https://api.appcenter.ms/v0.1/apps/${appCenterOwnerName}/${appCenterAppName}"
     def postReleaseResponse = appCenterPostRelease("${appCenterUrl}/release_uploads", appCenterToken)
+    println postReleaseResponse
     postReleaseResponse = new JSONObject(postReleaseResponse)
     def appCenterUploadId = postReleaseResponse.get("upload_id")
     def appCenterUploadUrl = postReleaseResponse.get("upload_url")
