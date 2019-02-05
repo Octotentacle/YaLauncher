@@ -180,4 +180,6 @@ workflows:
             - "Build"
           filters:
             branches:
-              only: master
+              only:
+                - master
+                - dev
