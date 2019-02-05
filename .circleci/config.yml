@@ -106,15 +106,13 @@ jobs:
         name: Deploy AppCenter
         command: ./gradlew -Pdeploy=true deployAppCenter
   "ktlint_download":
-    working_directory: ~/code
-    docker:
-      - image: circleci/buildpack-deps:jessie-curl
+    <<: *defaults
     steps:
     - attach_workspace:
         at: ~/code
     - restore_cache:
         keys:
-        - jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+        - ktlint-0.3
     - run:
         name: Download ktlint
         command: |
@@ -123,9 +121,13 @@ jobs:
             chmod a+x ktlint
           fi
     - save_cache:
-        key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+        key: ktlint-0.3
         paths:
         - ~/ktlint
+    - persist_to_workspace:
+        root: ~/code
+        paths:
+        - ./ktlint
     "ktlint":
       <<: *defaults
       steps:
