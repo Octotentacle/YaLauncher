@@ -114,7 +114,7 @@ jobs:
         at: ~/code
     - restore_cache:
         keys:
-        - ktlint-0.30
+        - jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
     - run:
         name: Download ktlint
         command: |
@@ -123,13 +123,9 @@ jobs:
             chmod a+x ktlint
           fi
     - save_cache:
-        key: ktlint-0.30
+        key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
         paths:
         - ~/ktlint
-    - persist_to_workspace:
-        root: ~/
-        paths:
-        - ./ktlint
     "ktlint":
       <<: *defaults
       steps:
