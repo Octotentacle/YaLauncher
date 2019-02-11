@@ -10,7 +10,7 @@ apply plugin: 'io.fabric'
 
 
 def keystoreProperties
-if (System.getenv("CI") == null && System.getenv("APPCENTER_BRANCH") == null) {
+if (System.getenv("CI") == null) {
     if(rootProject.file("keystores/keystore.properties").exists()) {
         def keystorePropertiesFile = rootProject.file("keystores/keystore.properties")
         keystoreProperties = new Properties()
@@ -22,7 +22,7 @@ android {
     signingConfigs {
         release {
             storeFile rootProject.file('keystores/key.jks')
-            if (System.getenv("CI") != null || System.getenv("APPCENTER_BRANCH") != null) {
+            if (System.getenv("CI") != null) {
                 storePassword System.getenv("STORE_PASSWORD")
                 keyPassword System.getenv("KEY_PASSWORD")
                 keyAlias System.getenv("KEY_ALIAS")
@@ -46,7 +46,7 @@ android {
 
         def fabricKey
         def appCenterKey
-        if (System.getenv("CI") != null || System.getenv("APPCENTER_BRANCH") != null) {
+        if (System.getenv("CI") != null) {
             appCenterKey = System.getenv("APPCENTER_KEY")
             fabricKey = System.getenv("FABRIC_API_KEY")
         } else {
@@ -61,7 +61,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            if(rootProject.file("keystores/keystore.properties").exists()) {
+            if(rootProject.file("keystores/keystore.properties").exists() || System.getenv("CI") != null) {
                 signingConfig signingConfigs.release
             }
             ext.betaDistributionGroupAliases = 'andrei-khilko'
