@@ -1,0 +1,4 @@
+* app builds in console via ./gradlew clean assembleRelease
+* added static analysis tools: ktlint and detekt
+* added margin between text elements in main page
+* app renamed to Andrei Khilko

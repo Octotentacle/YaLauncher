@@ -143,6 +143,19 @@ jobs:
     - store_artifacts:
         path: app/build/reports
         destination: reports
+  "detekt":
+    <<: *defaults
+    steps:
+    - attach_workspace:
+        at: ~/code
+    - restore_cache:
+        key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+    - run:
+        name: Run Detekt
+        command: ./gradlew detekt
+    - store_artifacts:
+        path: app/build/reports
+        destination: reports
 workflows:
   version: 2
   build:
@@ -164,6 +177,10 @@ workflows:
             - "Lint"
             - "Unit_tests"
             - "ktlint"
+            - "detekt"
+      - "detekt":
+          requires:
+          - "Dependencies"
       - "Fabric_prop":
           filters:
             branches:

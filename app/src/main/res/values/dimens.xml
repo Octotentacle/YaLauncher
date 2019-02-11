@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="r_margin">16dp</dimen>
+    <dimen name="r_round_image">152dp</dimen>
+    <dimen name="r_main_text">20sp</dimen>
+    <dimen name="r_sec_text">16sp</dimen>
+</resources>
