@@ -177,7 +177,7 @@ workflows:
             - "ktlint"
       - "detekt":
           requires:
-          - "Build"
+          - "Dependencies"
       - "Fabric_prop":
           filters:
             branches:
