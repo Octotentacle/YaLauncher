@@ -148,6 +148,8 @@ jobs:
     steps:
     - attach_workspace:
         at: ~/code
+    - restore_cache:
+        key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
     - run:
         name: Run Detekt
         command: ./gradlew detekt
@@ -175,6 +177,7 @@ workflows:
             - "Lint"
             - "Unit_tests"
             - "ktlint"
+            - "detekt"
       - "detekt":
           requires:
           - "Dependencies"
