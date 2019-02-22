@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Андрей Хилько</string>
+    <string name="def_model_hint">Портретная: 4 иконки в ряд\nЛандшафтная: 6 иконок в ряд</string>
+    <string name="sol_model_hint">Портретная: 5 иконок в ряд\nЛандшафтная: 7 иконок в ряд</string>
+    <string name="action_settings">Настройки</string>
+    <string name="dark_theme">Тёмная тема</string>
+    <string name="light_theme">Светлая тема</string>
+</resources>
