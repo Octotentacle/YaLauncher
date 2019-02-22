@@ -17,7 +17,14 @@
                 android:name=".LauncherActivity"
                 android:label="@string/title_activity_launcher"
                 android:theme="@style/AppThemeLight">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
 
+                <category android:name="android.intent.category.HOME"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.MONKEY"/>
+                <category android:name="android.intent.category.LAUNCHER_APP"/>
+            </intent-filter>
         </activity>
         <activity android:name=".WelcomeActivity">
             <intent-filter>
