@@ -11,7 +11,7 @@ apply plugin: 'io.fabric'
 
 def keystoreProperties
 if (System.getenv("CI") == null) {
-    if(rootProject.file("keystores/keystore.properties").exists()) {
+    if (rootProject.file("keystores/keystore.properties").exists()) {
         def keystorePropertiesFile = rootProject.file("keystores/keystore.properties")
         keystoreProperties = new Properties()
         keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
@@ -27,7 +27,7 @@ android {
                 keyPassword System.getenv("KEY_PASSWORD")
                 keyAlias System.getenv("KEY_ALIAS")
             } else {
-                if(rootProject.file("keystores/keystore.properties").exists()) {
+                if (rootProject.file("keystores/keystore.properties").exists()) {
                     storePassword keystoreProperties['storePassword']
                     keyPassword keystoreProperties['keyPassword']
                     keyAlias keystoreProperties['keyAlias']
@@ -40,8 +40,8 @@ android {
         applicationId "octotentacle.yalauncher"
         minSdkVersion 22
         targetSdkVersion 28
-        versionCode 110
-        versionName "1.1"
+        versionCode 200
+        versionName "2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         def fabricKey
@@ -50,7 +50,7 @@ android {
             appCenterKey = System.getenv("APPCENTER_KEY")
             fabricKey = System.getenv("FABRIC_API_KEY")
         } else {
-            if(rootProject.file("keystores/keystore.properties").exists()) {
+            if (rootProject.file("keystores/keystore.properties").exists()) {
                 appCenterKey = keystoreProperties['appcenterKey']
                 fabricKey = keystoreProperties["apiKey"]
             }
@@ -61,7 +61,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            if(rootProject.file("keystores/keystore.properties").exists() || System.getenv("CI") != null) {
+            if (rootProject.file("keystores/keystore.properties").exists() || System.getenv("CI") != null) {
                 signingConfig signingConfigs.release
             }
             ext.betaDistributionGroupAliases = 'andrei-khilko'
@@ -75,6 +75,12 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.android.support:coordinatorlayout:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.android.support:preference-v7:28.0.0'
+    //implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
+    implementation 'com.android.support:support-v4:28.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
