@@ -2,14 +2,12 @@ package octotentacle.yalauncher.fragments
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.support.v7.preference.Preference
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.support.v7.preference.PreferenceFragmentCompat
 import android.support.v7.preference.PreferenceManager
-import android.util.Log
 import android.widget.RadioButton
 import android.widget.RadioGroup
 

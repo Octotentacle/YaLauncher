@@ -1,9 +1,11 @@
 package octotentacle.yalauncher
 
+import android.content.Intent
 import android.content.res.Resources
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.provider.AlarmClock.EXTRA_MESSAGE
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.view.ViewPager
 import android.view.View
@@ -15,6 +17,10 @@ class WelcomeActivity : AppCompatActivity(), View.OnClickListener {
             mViewPager!!.setCurrentItem(pageNum + 1, true)
         } else {
             finish()
+            val nextInt = Intent(this, LauncherActivity::class.java).apply{
+                putExtra(EXTRA_MESSAGE, "")
+            }
+            startActivity(nextInt)
         }
     }
 
