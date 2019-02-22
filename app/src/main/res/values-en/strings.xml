@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Andrei Khilko</string>
+    <string name="def_model_hint">Portrait: 4 icons per row\\nLandscape: 6 icons per row</string>
+    <string name="sol_model_hint">Portrait: 5 icons per row\\nLandscape: 7 icons per row</string>
+</resources>
