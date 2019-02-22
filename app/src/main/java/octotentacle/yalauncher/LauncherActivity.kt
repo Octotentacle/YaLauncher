@@ -17,6 +17,12 @@ import android.support.v7.widget.*
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import com.crashlytics.android.Crashlytics
+import com.microsoft.appcenter.AppCenter
+import com.microsoft.appcenter.analytics.Analytics
+import com.microsoft.appcenter.crashes.Crashes
+import com.microsoft.appcenter.distribute.Distribute
+import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_launcher.*
 import kotlinx.android.synthetic.main.app_bar_launcher.*
 import octotentacle.yalauncher.apps.GridItemDecoration
@@ -30,6 +36,11 @@ class LauncherActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AppCenter.start(
+            application, "78320121-e28f-4703-a7f1-c8da1bb912ab",
+            Analytics::class.java, Crashes::class.java, Distribute::class.java)
+        Fabric.with(this, Crashlytics())
+        setContentView(R.layout.activity_main)
         setContentView(R.layout.activity_launcher)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)

@@ -9,6 +9,12 @@ import android.provider.AlarmClock.EXTRA_MESSAGE
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.view.ViewPager
 import android.view.View
+import com.crashlytics.android.Crashlytics
+import com.microsoft.appcenter.AppCenter
+import com.microsoft.appcenter.analytics.Analytics
+import com.microsoft.appcenter.crashes.Crashes
+import com.microsoft.appcenter.distribute.Distribute
+import io.fabric.sdk.android.Fabric
 
 class WelcomeActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
@@ -26,6 +32,11 @@ class WelcomeActivity : AppCompatActivity(), View.OnClickListener {
 
     private var mViewPager: ViewPager? = null
     override fun onCreate(savedInstanceState: Bundle?) {
+        AppCenter.start(
+            application, "78320121-e28f-4703-a7f1-c8da1bb912ab",
+            Analytics::class.java, Crashes::class.java, Distribute::class.java)
+        Fabric.with(this, Crashlytics())
+        setContentView(R.layout.activity_main)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.welcome_page)
         mViewPager = findViewById(R.id.welcome_page_view_pager)
