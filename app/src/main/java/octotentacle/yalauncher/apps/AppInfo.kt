@@ -1,0 +1,2 @@
+package octotentacle.yalauncher.apps
+
