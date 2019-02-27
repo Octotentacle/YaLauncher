@@ -1,7 +1,6 @@
 package octotentacle.yalauncher.apps
 
 import android.content.Context
-import android.util.Log
 import android.view.ContextMenu
 
 import android.view.MenuItem
