@@ -12,7 +12,6 @@ import octotentacle.yalauncher.R
 class ItemContextMenu(val appInfo: AppInfo, val context: Context): View.OnCreateContextMenuListener, MenuItem.OnMenuItemClickListener {
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
-        Log.d("MENUCON", appInfo.name + item?.itemId.toString())
         when (item?.itemId) {
             0 -> context.startActivity(appInfo.deleteIntent)
             1 -> context.startActivity(appInfo.infoIntent)
