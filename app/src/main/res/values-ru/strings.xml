@@ -6,4 +6,6 @@
     <string name="action_settings">Настройки</string>
     <string name="dark_theme">Тёмная тема</string>
     <string name="light_theme">Светлая тема</string>
+    <string name="menu_item_remove">Удалить</string>
+    <string name="menu_item_info">Информация</string>
 </resources>

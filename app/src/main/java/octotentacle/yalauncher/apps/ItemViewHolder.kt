@@ -12,7 +12,7 @@ class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val icon: SquareImageView = itemView.findViewById(R.id.item_icon)
     private val name: TextView = itemView.findViewById(R.id.item_name)
 
-    fun bind(app: LauncherActivity.AppInfo) {
+    fun bind(app: AppInfo) {
         icon.setImageDrawable(app.icon)
         name.text = app.name
     }

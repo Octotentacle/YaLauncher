@@ -11,7 +11,7 @@ import octotentacle.yalauncher.R
 
 class ItemListAdapter(
     private val context: Context,
-    private val appList: List<LauncherActivity.AppInfo>
+    private val appList: List<AppInfo>
 ) : RecyclerView.Adapter<ItemViewHolder>() {
     override fun getItemCount(): Int = appList.size
 

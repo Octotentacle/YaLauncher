@@ -5,13 +5,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import octotentacle.yalauncher.LauncherActivity
 import octotentacle.yalauncher.R
 
 
 class ItemGridAdapter(
     private val context: Context,
-    private val appList: List<LauncherActivity.AppInfo>
+    private val appList: List<AppInfo>
 ) : RecyclerView.Adapter<ItemViewHolder>() {
     override fun getItemCount(): Int = appList.size
 
@@ -25,5 +24,6 @@ class ItemGridAdapter(
         holder.setOnClickListener(View.OnClickListener {
             context.startActivity(appList[position].launchIntent)
         })
+        holder.itemView.setOnCreateContextMenuListener(ItemContextMenu(appList[position], context))
     }
 }
