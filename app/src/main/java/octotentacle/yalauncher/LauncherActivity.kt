@@ -1,7 +1,9 @@
 package octotentacle.yalauncher
 
+import android.app.Activity
 import android.content.ComponentName
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
@@ -18,29 +20,51 @@ import android.view.*
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_launcher.*
-import octotentacle.yalauncher.apps.GridItemDecoration
-import octotentacle.yalauncher.apps.ItemGridAdapter
-import octotentacle.yalauncher.apps.ItemListAdapter
-import octotentacle.yalauncher.apps.AppInfo
-
+import octotentacle.yalauncher.apps.*
 
 
 class LauncherActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    private lateinit var listItems : RecyclerView
-    private lateinit var gridItems : RecyclerView
+    lateinit var rec : Receiver
+
+    companion object {
+        var appList : MutableList<AppInfo> = ArrayList<AppInfo>()
+        lateinit var listItems : RecyclerView
+        lateinit var gridItems : RecyclerView
+        fun remove(pack: Uri){
+            val rmit = appList.find{it.pack == pack} ?: return
+            val pos = appList.indexOf(rmit)
+            appList.remove(rmit)
+            listItems.adapter?.notifyItemRemoved(pos)
+            listItems.adapter?.notifyItemRangeChanged(pos, appList.size)
+            gridItems.adapter?.notifyItemRemoved(pos)
+            gridItems.adapter?.notifyItemRangeChanged(pos, appList.size)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        rec = Receiver()
+        registerReceiver(rec, IntentFilter().apply {
+            addAction(Intent.ACTION_PACKAGE_REMOVED)
+            addAction(Intent.ACTION_PACKAGE_ADDED)
+            addDataScheme("package")
+        })
         super.onCreate(savedInstanceState)
-        Fabric.with(this, Crashlytics())
-        setContentView(R.layout.activity_main)
-        setContentView(R.layout.activity_launcher)
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
 
-        val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawer_layout.addDrawerListener(toggle)
-        toggle.syncState()
+        val shPrefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        val WelcomeLaunch = shPrefs.getBoolean("welcome_act_launch", true)
+
+        if(WelcomeLaunch){
+            startActivity(Intent(this, WelcomeActivity::class.java))
+            shPrefs.edit().putBoolean("welcome_act_launch", false).apply()
+        }
+
+        Fabric.with(this, Crashlytics())
+        //setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_launcher)
+
+        nav_view.setCheckedItem(R.id.nav_grid)
+
         nav_view.setNavigationItemSelectedListener(this::onNavigationItemSelected)
         initRecyclers()
     }
@@ -68,23 +92,19 @@ class LauncherActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.nav_camera -> {
-
-            }
-            R.id.nav_gallery -> {
-
-            }
-            R.id.nav_slideshow -> {
-
-            }
-            R.id.nav_manage -> {
-
-            }
             R.id.nav_share -> {
 
             }
             R.id.nav_send -> {
 
+            }
+            R.id.nav_list -> {
+                gridItems.visibility = View.GONE
+                listItems.visibility = View.VISIBLE
+            }
+            R.id.nav_grid -> {
+                gridItems.visibility = View.VISIBLE
+                listItems.visibility = View.GONE
             }
         }
 
@@ -93,7 +113,7 @@ class LauncherActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     }
 
     private fun initRecyclers() {
-        val appList = getInstalledAppList()
+        appList = getInstalledAppList()
         val shPrefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
         val spanCount = when(shPrefs.getBoolean("app_model_default", true)){
             true -> resources.getInteger(R.integer.model_default)
@@ -102,7 +122,7 @@ class LauncherActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         listItems = findViewById(R.id.list_items)
         listItems.layoutManager = LinearLayoutManager(this)
         listItems.adapter = ItemListAdapter(this, appList)
-        listItems.visibility = View.GONE
+
         gridItems = findViewById(R.id.grid_items)
         gridItems.layoutManager = GridLayoutManager(this, spanCount)
         gridItems.adapter = ItemGridAdapter(this, appList)
@@ -111,10 +131,22 @@ class LauncherActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         val dividerItemDecoration = DividerItemDecoration(this, (listItems.layoutManager as LinearLayoutManager).orientation)
         listItems.addItemDecoration(GridItemDecoration(offset))
         listItems.addItemDecoration(dividerItemDecoration)
-
+        when(nav_view.checkedItem?.itemId){
+            R.id.nav_grid -> {
+                gridItems.visibility = View.VISIBLE
+                listItems.visibility = View.GONE
+            }
+            R.id.nav_list -> {
+                gridItems.visibility = View.GONE
+                listItems.visibility = View.VISIBLE
+            }
+        }
     }
 
-    private fun getInstalledAppList(): List<AppInfo> {
+    private fun getInstalledAppList(): MutableList<AppInfo> {
+
+        if(appList.size != 0) return appList
+
         val appsInfoList = ArrayList<AppInfo>()
         val intent = Intent(Intent.ACTION_MAIN)
         intent.addCategory(Intent.CATEGORY_LAUNCHER)
@@ -140,12 +172,13 @@ class LauncherActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         val removeIntent = Intent(Intent.ACTION_UNINSTALL_PACKAGE, pack)
         removeIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         removeIntent.data = pack
+        //removeIntent.putExtra(Intent.EXTRA_RETURN_RESULT, true)
 
         launchIntent.addCategory(Intent.CATEGORY_LAUNCHER)
         launchIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
         launchIntent.component =
             ComponentName(resolveInfo.activityInfo.applicationInfo.packageName, resolveInfo.activityInfo.name)
-        return AppInfo(icon, name, isUserApp(resolveInfo.activityInfo.packageName) , launchIntent, removeIntent, infoIntent)
+        return AppInfo(icon, name, isUserApp(resolveInfo.activityInfo.packageName) , launchIntent, removeIntent, infoIntent, pack)
     }
 
     override fun getTheme(): Resources.Theme {

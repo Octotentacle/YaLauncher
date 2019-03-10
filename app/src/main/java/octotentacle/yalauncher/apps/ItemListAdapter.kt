@@ -25,5 +25,6 @@ class ItemListAdapter(
         holder.setOnClickListener(View.OnClickListener {
             context.startActivity(appList[position].launchIntent)
         })
+        holder.itemView.setOnCreateContextMenuListener(ItemContextMenu(appList[position], context, position))
     }
 }
