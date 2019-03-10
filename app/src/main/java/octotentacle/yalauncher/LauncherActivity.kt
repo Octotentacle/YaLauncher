@@ -1,6 +1,5 @@
 package octotentacle.yalauncher
 
-import android.app.Activity
 import android.content.ComponentName
 import android.content.Intent
 import android.content.IntentFilter
@@ -13,14 +12,21 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
-import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.*
-import android.view.*
+import android.support.v7.widget.DividerItemDecoration
+import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_launcher.*
-import octotentacle.yalauncher.apps.*
+import octotentacle.yalauncher.apps.AppInfo
+import octotentacle.yalauncher.apps.GridItemDecoration
+import octotentacle.yalauncher.apps.ItemGridAdapter
+import octotentacle.yalauncher.apps.ItemListAdapter
 
 
 class LauncherActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
