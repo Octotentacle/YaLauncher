@@ -3,6 +3,7 @@ package octotentacle.yalauncher
 import android.content.ComponentName
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.SharedPreferences
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
@@ -20,9 +21,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
+import android.widget.LinearLayout
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_launcher.*
+import kotlinx.android.synthetic.main.nav_header_launcher.*
 import octotentacle.yalauncher.apps.AppInfo
 import octotentacle.yalauncher.apps.GridItemDecoration
 import octotentacle.yalauncher.apps.ItemGridAdapter
@@ -37,6 +41,7 @@ class LauncherActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         var appList : MutableList<AppInfo> = ArrayList<AppInfo>()
         lateinit var listItems : RecyclerView
         lateinit var gridItems : RecyclerView
+        lateinit var shPrefs : SharedPreferences
         fun remove(pack: Uri){
             val rmit = appList.find{it.pack == pack} ?: return
             val pos = appList.indexOf(rmit)
@@ -49,15 +54,16 @@ class LauncherActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         rec = Receiver()
+        shPrefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+
         registerReceiver(rec, IntentFilter().apply {
             addAction(Intent.ACTION_PACKAGE_REMOVED)
             addAction(Intent.ACTION_PACKAGE_ADDED)
             addDataScheme("package")
         })
-        super.onCreate(savedInstanceState)
 
-        val shPrefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
         val WelcomeLaunch = shPrefs.getBoolean("welcome_act_launch", true)
 
         if(WelcomeLaunch){
@@ -66,12 +72,20 @@ class LauncherActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         }
 
         Fabric.with(this, Crashlytics())
-        //setContentView(R.layout.activity_main)
+
         setContentView(R.layout.activity_launcher)
 
-        nav_view.setCheckedItem(R.id.nav_grid)
-
         nav_view.setNavigationItemSelectedListener(this::onNavigationItemSelected)
+
+        when(shPrefs.getBoolean("nav_grid_menu", true)){
+            true -> nav_view.setCheckedItem(R.id.nav_grid)
+            false -> nav_view.setCheckedItem(R.id.nav_list)
+        }
+
+        nav_view.getHeaderView(0).findViewById<LinearLayout>(R.id.nav_header).setOnClickListener {
+            startActivity(Intent(this, ProfileActivity::class.java))
+        }
+
         initRecyclers()
     }
 
@@ -98,19 +112,18 @@ class LauncherActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.nav_share -> {
-
-            }
-            R.id.nav_send -> {
+            R.id.nav_settings -> {
 
             }
             R.id.nav_list -> {
                 gridItems.visibility = View.GONE
                 listItems.visibility = View.VISIBLE
+                shPrefs.edit().putBoolean("nav_grid_menu", false).apply()
             }
             R.id.nav_grid -> {
                 gridItems.visibility = View.VISIBLE
                 listItems.visibility = View.GONE
+                shPrefs.edit().putBoolean("nav_grid_menu", true).apply()
             }
         }
 
@@ -178,7 +191,6 @@ class LauncherActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         val removeIntent = Intent(Intent.ACTION_UNINSTALL_PACKAGE, pack)
         removeIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         removeIntent.data = pack
-        //removeIntent.putExtra(Intent.EXTRA_RETURN_RESULT, true)
 
         launchIntent.addCategory(Intent.CATEGORY_LAUNCHER)
         launchIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
